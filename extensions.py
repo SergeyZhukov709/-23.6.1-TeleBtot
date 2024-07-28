@@ -14,6 +14,9 @@ class get_price:
         if quote == base:
             raise ConvertionException(f'Невозможно перевести одинаковые валюты {base}.')
 
+        if float(amount) <= 0:
+            raise ConvertionException(f'Количество должно быть больше 0')
+
         try:
             quote_ticker = keys[quote]
         except KeyError:
@@ -28,6 +31,7 @@ class get_price:
             amount = float(amount)
         except ValueError:
             raise ConvertionException(f'Не удалось обработать количество {amount}')
+
 
         r = requests.get(f'https://min-api.cryptocompare.com/data/price?fsym={quote_ticker}&tsyms={base_ticker}')  # динамическая строка(f)
         total = json.loads(r.content)[keys[base]]
